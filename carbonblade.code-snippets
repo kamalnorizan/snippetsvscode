@@ -1,0 +1,9 @@
+{
+	"carbonblade": {
+		"prefix": "carbonblade",
+		"body": [
+			"{{\\Carbon\\Carbon::parse(${1:tarikh})->format('d-m-Y')}}",
+		],
+		"description": "carbonblade"
+	}
+}
