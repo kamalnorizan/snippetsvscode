@@ -9,6 +9,6 @@ $factory->define(Comment::class, function (Faker $faker) {
     return [
         'comment'=>$faker->text(200),
         'user_id'=>rand(1,51),
-        'post_id'=>rand(1,30),
+        'post_id'=>168
     ];
 });
