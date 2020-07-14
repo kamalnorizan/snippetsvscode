@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\User;
 use Illuminate\Http\Request;
 use Auth;
 class PostController extends Controller
@@ -14,8 +15,12 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('comments.user')->where('user_id',Auth::user()->id)->get();
-        return view('post.index',compact('posts'));
+        $posts = Post::with('comments.user', 'user')->where('user_id',Auth::user()->id)->get();
+        $postOptions = Post::where('id','<=',10)->pluck('title','id');
+        
+        $options = User::pluck('name','id');
+
+        return view('post.index',compact('posts','options','postOptions'));
     }
 
     /**
