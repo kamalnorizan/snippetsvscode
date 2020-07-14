@@ -25,3 +25,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/post','PostController@index')->name('post.index');
+
+Route::get('/user/assignrole/{user}/{role}', 'UserController@assignrole')->name('user.assignrole');
+Route::resource('user', 'UserController');
+Route::resource('post', 'PostController');
