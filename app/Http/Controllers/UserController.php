@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -14,8 +16,10 @@ class UserController extends Controller
      */
     public function index()
     {
+        $roles = Role::all();
+        $permissions = Permission::all();
         $users = User::paginate(15);
-        return view('user.index',compact('users'));
+        return view('user.index',compact('users','roles','permissions'));
     }
 
     /**
@@ -87,6 +91,28 @@ class UserController extends Controller
     public function assignrole(User $user, $role)
     {
         $user->assignRole($role);
+        flash('Role '.$role.' telah di daftarkan kepada pengguna '.$user->name)->success()->important();
+        return back();
+    }
+
+    public function assignpermissiontorole(Role $role, $permission)
+    {
+        $role->givePermissionTo($permission);
+        flash('Permission '.$permission.' telah di daftarkan kepada '.$role->name)->success()->important();
+        return back();
+    }
+
+    public function revokerole($revoke, $id, $process)
+    {
+        if ($process=='revokeRole') {
+            $user = User::find($id);
+            $user->removeRole($revoke);
+            flash('Role '.$revoke.' has been romoved from user '.$user->name)->warning()->important();
+        }else{
+            $role=Role::find($id);
+            $role->revokePermissionTo($revoke);
+            flash('Permission '.$revoke.' has been romoved from role '.$role->name)->warning()->important();
+        }
         return back();
     }
 }

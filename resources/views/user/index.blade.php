@@ -3,10 +3,61 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">Roles</div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <td>
+                                Role
+                            </td>
+                            <td>
+                                Permission
+                            </td>
+                            <td>
+                                Action
+                            </td>
+                        </tr>
+                        @foreach ($roles as $role)
+                        <tr>
+                            <td>
+                                {{ucfirst($role->name)}}
+                            </td>
+                            <td>
+                                @foreach ($role->permissions as $permission)
+                                <a onclick="return confirm('Are you sure you want to remove this permission from this role?')" href="{{route('user.revokerole',['revoke'=>$permission->name,'id'=>$role->id,'process'=>'revokePermission'])}}" class="badge badge-pill badge-success">
+                                    {{$permission->name}}
+                                </a>
+                                @endforeach
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group" aria-label="">
+                                    <div class="btn-group" role="group">
+                                        <button id="dropdownId" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                        Assign Permission
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownId">
+                                        @foreach ($permissions as $permission)
+                                        <a class="dropdown-item" href="{{route('user.assignpermissiontorole',['permission'=>$permission->name,'role'=>$role->id])}}">{{$permission->name}}</a>
+                                        @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row justify-content-center">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Users</div>
-
                 <div class="card-body">
                     <table class="table">
                         <tr>
@@ -26,13 +77,18 @@
                             </td>
                             <td>
                                 @foreach ($user->roles as $role)
-                                <span class="badge badge-pill badge-primary">
+                                <a onclick="return confirm('Are you sure you want to remove this role from this user?')" href="{{route('user.revokerole',['revoke'=>$role->name,'id'=>$user->id,'process'=>'revokeRole'])}}" class="badge badge-pill badge-primary">
                                     {{$role->name}}
-                                </span>
+                                </a>
                                 @endforeach
                             </td>
                             <td>
+                                @foreach ($user->getAllPermissions() as $permission)
+                                <span class="badge badge-pill badge-success">
+                                    {{$permission->name}}
+                                </span>
 
+                                @endforeach
                             </td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="">
@@ -42,10 +98,9 @@
                                             Assign Role
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownId">
-                                            <a class="dropdown-item" href="/user/assignrole/{{$user->id}}/writer">Writer</a>
-                                            <a class="dropdown-item" href="/user/assignrole/{{$user->id}}/editor">Editor</a>
-                                            <a class="dropdown-item" href="/user/assignrole/{{$user->id}}/publisher">Publisher</a>
-                                            <a class="dropdown-item" href="/user/assignrole/{{$user->id}}/admin">Admin</a>
+                                            @foreach ($roles as $role)
+                                            <a class="dropdown-item" href="{{route('user.assignrole',['role'=>$role->name,'user'=>$user->id])}}">{{ucfirst($role->name)}}</a>
+                                            @endforeach
                                         </div>
                                     </div>
                                     @endrole

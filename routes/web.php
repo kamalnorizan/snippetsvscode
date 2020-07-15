@@ -24,8 +24,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/post','PostController@index')->name('post.index');
 
+Route::get('/user/revokerole/{revoke}/{id}/{process}', 'UserController@revokerole')->name('user.revokerole');
+Route::get('/user/assignpermissiontorole/{role}/{permission}', 'UserController@assignpermissiontorole')->name('user.assignpermissiontorole');
 Route::get('/user/assignrole/{user}/{role}', 'UserController@assignrole')->name('user.assignrole');
-Route::resource('user', 'UserController');
-Route::resource('post', 'PostController');
+
+Route::resource('user', 'UserController')->except(['edit']);
+Route::resource('post', 'PostController')->except(['edit']);

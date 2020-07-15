@@ -75,6 +75,13 @@
         </nav>
 
         <main class="py-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        @include('flash::message')
+                    </div>
+                </div>
+            </div>
             @yield('content')
         </main>
     </div>
