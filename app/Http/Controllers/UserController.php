@@ -16,9 +16,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();
-        $permissions = Permission::all();
-        $users = User::paginate(15);
+        $roles = Role::with('permissions')->get();
+        $permissions = Permission::get();
+        $users = User::with('roles.permissions','permissions')->paginate(15);
         return view('user.index',compact('users','roles','permissions'));
     }
 
@@ -95,6 +95,13 @@ class UserController extends Controller
         return back();
     }
 
+    public function test(Role $role, User $user)
+    {
+        // $role = Role::find($id);
+        $user->name;
+        dd($id);
+    }
+
     public function assignpermissiontorole(Role $role, $permission)
     {
         $role->givePermissionTo($permission);
@@ -108,11 +115,22 @@ class UserController extends Controller
             $user = User::find($id);
             $user->removeRole($revoke);
             flash('Role '.$revoke.' has been romoved from user '.$user->name)->warning()->important();
+        }elseif($process=='revokeDirectPermission'){
+            $user = User::find($id);
+            $user->revokePermissionTo($revoke);
+            flash('Permission '.$revoke.' has been romoved from user '.$user->name)->warning()->important();
         }else{
             $role=Role::find($id);
             $role->revokePermissionTo($revoke);
             flash('Permission '.$revoke.' has been romoved from role '.$role->name)->warning()->important();
         }
+        return back();
+    }
+
+    public function assignpermissiontouser(User $user, $permission)
+    {
+        $user->givePermissionTo($permission);
+        flash('Permission assigned to user successfully')->success()->important();
         return back();
     }
 }

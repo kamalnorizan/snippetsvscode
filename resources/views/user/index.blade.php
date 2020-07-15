@@ -83,11 +83,17 @@
                                 @endforeach
                             </td>
                             <td>
-                                @foreach ($user->getAllPermissions() as $permission)
+                                {{-- permission via role --}}
+                                @foreach ($user->getPermissionsViaRoles() as $permission)
                                 <span class="badge badge-pill badge-success">
                                     {{$permission->name}}
                                 </span>
-
+                                @endforeach
+                                {{-- direct permission --}}
+                                @foreach ($user->getDirectPermissions() as $permission)
+                                <a onclick="return confirm('Are you sure you want to remove this permission from this user?')" href="{{route('user.revokerole',['revoke'=>$permission->name,'id'=>$user->id,'process'=>'revokeDirectPermission'])}}" class="badge badge-pill badge-warning">
+                                    {{$permission->name}}
+                                </a>
                                 @endforeach
                             </td>
                             <td>
@@ -104,6 +110,19 @@
                                         </div>
                                     </div>
                                     @endrole
+                                </div>
+                                <div class="btn-group" role="group" aria-label="">
+                                    <div class="btn-group" role="group">
+                                        <button id="dropdownId" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                        Assign Permission
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownId">
+                                        @foreach ($permissions as $permission)
+                                        <a class="dropdown-item" href="{{route('user.assignpermissiontouser',['permission'=>$permission->name,'user'=>$user->id])}}">{{$permission->name}}</a>
+                                        @endforeach
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
