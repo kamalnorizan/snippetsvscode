@@ -26,6 +26,14 @@ class ApiController extends Controller
         }
     }
 
+    public function removePost(Request $request)
+    {
+        Post::find($request->id)->delete();
+        $response['status']='Success';
+        $response['msg']='Post deleted successfully';
+        return response()->json($response, 200);
+    }
+
     public function sendError($error, $errorMessages = [], $code=404)
     {
         $response = [
