@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +22,7 @@ class UserController extends Controller
     {
         $roles = Role::with('permissions')->get();
         $permissions = Permission::get();
-        $users = User::with('roles.permissions','permissions')->paginate(15);
+        $users = User::with('roles.permissions','permissions')->latest()->paginate(15);
         return view('user.index',compact('users','roles','permissions'));
     }
 
@@ -29,7 +33,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('user.create');
     }
 
     /**
@@ -40,7 +44,13 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return redirect('/user');
     }
 
     /**

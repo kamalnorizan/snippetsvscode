@@ -25,13 +25,17 @@ Auth::routes(['register'=>false]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/user/test/{role}/{user}', 'UserController@test')->name('user.test');
-Route::get('/user/revokerole/{revoke}/{id}/{process}', 'UserController@revokerole')->name('user.revokerole');
+Route::get('/user/revokerole/{revoke}/{id}/{process}', 'UserController@revokerole')->name('user.revokerole')->middleware('permission:delete comment|show post');
 
-Route::get('/user/assignpermissiontouser/{user}/{permission}', 'UserController@assignpermissiontouser')->name('user.assignpermissiontouser');
+Route::group(['prefix' => '/user', 'middleware' => ['permission:create comment']], function () {
 
-Route::get('/user/assignpermissiontorole/{role}/{permission}', 'UserController@assignpermissiontorole')->name('user.assignpermissiontorole');
-Route::get('/user/assignrole/{user}/{role}', 'UserController@assignrole')->name('user.assignrole');
+    Route::get('/assignpermissiontouser/{user}/{permission}', 'UserController@assignpermissiontouser')->name('user.assignpermissiontouser');
+    Route::get('/assignpermissiontorole/{role}/{permission}', 'UserController@assignpermissiontorole')->name('user.assignpermissiontorole');
+    Route::get('/assignrole/{user}/{role}', 'UserController@assignrole')->name('user.assignrole');
+});
 
-Route::resource('user', 'UserController')->except(['edit']);
-Route::resource('post', 'PostController')->except(['edit']);
+Route::group(['middleware' => ['permission:show post|delete post']], function () {
+    Route::resource('user', 'UserController')->except(['edit']);
+});
+
+Route::resource('post', 'PostController')->except(['edit'])->middleware('role:admin');

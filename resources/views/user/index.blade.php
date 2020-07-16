@@ -5,6 +5,49 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
+                <div class="card-header">Test Spatie</div>
+                <div class="card-body">
+
+                    @can('create post')
+                        Create Post
+                        <br>
+                    @endcan
+
+
+                    @hasallroles('writer|admin')
+                        Role Writer
+                        <br>
+
+                        Role Editor
+                        <br>
+                    @endhasallroles
+
+                    @cannot('edit post')
+                        cannot edit post
+                        <br>
+                    @endcannot
+
+                    @can('edit post')
+                        Edit Post
+                        <br>
+                    @endcan
+
+                    @can(['delete post','edit post','show post'])
+                        Delete Post (canany)
+                        <br>
+                    @endcan
+
+                    @can('show post')
+                        Show Post
+                        <br>
+                    @endcan
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card">
                 <div class="card-header">Roles</div>
                 <div class="card-body">
                     <table class="table">
@@ -15,9 +58,11 @@
                             <td>
                                 Permission
                             </td>
+                            @can('create comment')
                             <td>
                                 Action
                             </td>
+                            @endcan
                         </tr>
                         @foreach ($roles as $role)
                         <tr>
@@ -31,21 +76,23 @@
                                 </a>
                                 @endforeach
                             </td>
+
+                            @can('create comment')
                             <td>
                                 <div class="btn-group" role="group" aria-label="">
                                     <div class="btn-group" role="group">
-                                        <button id="dropdownId" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false">
-                                        Assign Permission
+                                        <button id="dropdownId" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Assign Permission
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownId">
-                                        @foreach ($permissions as $permission)
-                                        <a class="dropdown-item" href="{{route('user.assignpermissiontorole',['permission'=>$permission->name,'role'=>$role->id])}}">{{$permission->name}}</a>
-                                        @endforeach
+                                            @foreach ($permissions as $permission)
+                                            <a class="dropdown-item" href="{{route('user.assignpermissiontorole',['permission'=>$permission->name,'role'=>$role->id])}}">{{$permission->name}}</a>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
                             </td>
+                            @endcan
                         </tr>
                         @endforeach
                     </table>
@@ -65,7 +112,9 @@
                             <td>Email</td>
                             <td>Role(s)</td>
                             <td>Permission(s)</td>
+                            @can('create comment')
                             <td>Action</td>
+                            @endcan
                         </tr>
                         @foreach ($users as $user)
                         <tr>
@@ -96,9 +145,10 @@
                                 </a>
                                 @endforeach
                             </td>
+                            @cannot('create comment')
                             <td>
                                 <div class="btn-group" role="group" aria-label="">
-                                    @role('admin|writer')
+                                    {{-- @role('admin|writer') --}}
                                     <div class="btn-group" role="group">
                                         <button id="dropdownId" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             Assign Role
@@ -109,22 +159,22 @@
                                             @endforeach
                                         </div>
                                     </div>
-                                    @endrole
+                                    {{-- @endrole --}}
                                 </div>
                                 <div class="btn-group" role="group" aria-label="">
                                     <div class="btn-group" role="group">
-                                        <button id="dropdownId" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false">
-                                        Assign Permission
+                                        <button id="dropdownId" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Assign Permission
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownId">
-                                        @foreach ($permissions as $permission)
-                                        <a class="dropdown-item" href="{{route('user.assignpermissiontouser',['permission'=>$permission->name,'user'=>$user->id])}}">{{$permission->name}}</a>
-                                        @endforeach
+                                            @foreach ($permissions as $permission)
+                                            <a class="dropdown-item" href="{{route('user.assignpermissiontouser',['permission'=>$permission->name,'user'=>$user->id])}}">{{$permission->name}}</a>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
                             </td>
+                            @endcannot
                         </tr>
                         @endforeach
                     </table>
@@ -135,3 +185,4 @@
     </div>
 </div>
 @endsection
+
