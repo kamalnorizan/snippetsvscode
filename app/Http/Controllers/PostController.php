@@ -30,7 +30,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('post.create');
     }
 
     /**
@@ -41,7 +41,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $post = new Post();
+        // $post->title = $request->title;
+        // $post->content = $request->content;
+        // $post->save();
+
+        Post::create($request->all());
+        flash('Post created successfully')->success()->important();
+        return redirect('/post');
     }
 
     /**
@@ -52,7 +59,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-       
+
     }
 
     /**
@@ -63,7 +70,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('post.create',compact('post'));
     }
 
     /**
@@ -75,7 +82,9 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $post->update($request->all());
+        flash('Post updated successfully')->success()->important();
+        return redirect('/post');
     }
 
     /**

@@ -4,7 +4,6 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            bootselect
             <div class="form-group{{ $errors->has('user') ? ' has-error' : '' }}">
                 {!! Form::label('user', 'Senarai Pengguna') !!}
                 {!! Form::select('user', $options, null, ['id' => 'user', 'class' => 'form-control', 'required' => 'required']) !!}
@@ -20,7 +19,7 @@
 
             @foreach ($posts as $post)
             <div class="card">
-                <div class="card-header">{{$post->title}} ~ {{$post->user->name}}</div>
+            <div class="card-header">{{$post->title}} ~ {{$post->user->name}} <a class="btn btn-sm btn-info float-right" href="{{route('post.edit',['post'=>$post->id])}}">Edit</a></div>
                 <div class="card-body">
                     {{$post->content}}
                 </div>

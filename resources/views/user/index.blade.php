@@ -123,8 +123,10 @@
                             </td>
                             <td>
                                 {{$user->email}}
+                                {{-- {{$user->tokens->where('revoked',0)->first()}} --}}
                             </td>
                             <td>
+                            <a href="{{route('remove.token',['user'=>$user->id])}}">Remove Token</a>
                                 @foreach ($user->roles as $role)
                                 <a onclick="return confirm('Are you sure you want to remove this role from this user?')" href="{{route('user.revokerole',['revoke'=>$role->name,'id'=>$user->id,'process'=>'revokeRole'])}}" class="badge badge-pill badge-primary">
                                     {{$role->name}}
@@ -147,6 +149,7 @@
                             </td>
                             @cannot('create comment')
                             <td>
+
                                 <div class="btn-group" role="group" aria-label="">
                                     {{-- @role('admin|writer') --}}
                                     <div class="btn-group" role="group">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use App\User;
 use Auth;
 class ApiController extends Controller
 {
@@ -31,6 +32,7 @@ class ApiController extends Controller
         Post::find($request->id)->delete();
         $response['status']='Success';
         $response['msg']='Post deleted successfully';
+        $response['user']=Auth::user()->roles;
         return response()->json($response, 200);
     }
 
@@ -55,5 +57,21 @@ class ApiController extends Controller
         ];
 
         return response()->json($response, 200);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke();
+
+        return response()->json([
+            'message'=> 'Successfully logged out'
+        ], 200);
+    }
+
+    public function logoutManual(User $user)
+    {
+        dd($user->token());
+        $user->token()->revoke();
+        return back();
     }
 }

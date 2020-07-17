@@ -18,8 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/post', 'ApiController@index')->middleware('auth:api');
-
-Route::post('/post/removePost', 'ApiController@removePost')->middleware('auth:api');
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('/post', 'ApiController@index');
+    Route::post('/post/removePost', 'ApiController@removePost');
+    Route::get('/logout', 'ApiController@logout');
+});
 
 Route::post('/login','ApiController@login');
